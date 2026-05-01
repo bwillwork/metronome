@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit, Signal } from '@angular/core';
-import { BehaviorSubject, interval, map, NEVER, Observable, switchMap, tap } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, inject, OnDestroy, OnInit, Signal } from '@angular/core';
 import { MetronomeDisplay } from '../../components/metronome-display/metronome-display';
+import { MetronomeService } from '../../services/metronome/metronome-service';
 
 @Component({
   selector: 'app-metronome-page',
@@ -10,21 +9,15 @@ import { MetronomeDisplay } from '../../components/metronome-display/metronome-d
   styleUrl: './metronome-page.css',
 })
 export class MetronomePage implements OnInit, OnDestroy {
-  private started$ = new BehaviorSubject(false);
-  private metronome$: Observable<number> = this.started$.pipe(
-    switchMap((value) => {
-      const milliseconds = 1000;
-      return value ? interval(milliseconds) : NEVER;
-    }),
-  );
-  public metronome: Signal<number> = toSignal(this.metronome$, { initialValue: 0 });
+  private metronomeService: MetronomeService = inject(MetronomeService);
+  public counter: Signal<number> = this.metronomeService.getCounter();
 
   start() {
-    this.started$.next(true);
+    this.metronomeService.start();
   }
 
   stop() {
-    this.started$.next(false);
+    this.metronomeService.stop();
   }
 
   ngOnInit(): void {}
