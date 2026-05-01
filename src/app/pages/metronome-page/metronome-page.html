@@ -1,1 +1,8 @@
-<p>metronome-page works!</p>
+<div class="d-flex justify-content-center align-items-center h-600">
+  <div>
+    <app-metronome-display></app-metronome-display>
+    {{metronome()}}
+    <button class="btn btn-primary" (click)="start()">Start</button>
+    <button class="btn btn-dark" (click)="stop()">Stop</button>
+  </div>
+</div>
