@@ -1,5 +1,14 @@
-import { Injectable, Signal } from '@angular/core';
-import { BehaviorSubject, interval, NEVER, Observable, Subscription, switchMap } from 'rxjs';
+import { Injectable, signal, Signal, WritableSignal } from '@angular/core';
+import {
+  BehaviorSubject,
+  interval,
+  map,
+  NEVER,
+  Observable,
+  startWith,
+  Subscription,
+  switchMap,
+} from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { buildDefaultConfig, MetronomeConfig } from '../../types/metronome';
 
@@ -7,34 +16,26 @@ import { buildDefaultConfig, MetronomeConfig } from '../../types/metronome';
   providedIn: 'root',
 })
 export class MetronomeService {
-  private config: MetronomeConfig = buildDefaultConfig();
-  private started$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private metronome$: Observable<number> = this.started$.pipe(
-    switchMap((value) => {
-      const milliseconds = this.getMilliseconds(this.config);
-      return value ? interval(milliseconds) : NEVER;
-    }),
-  );
+  private config: WritableSignal<MetronomeConfig> = signal(buildDefaultConfig());
+  private running$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private metronome$: Observable<number> = this.buildMetronomeObs(this.running$);
   private counter: Signal<number> = toSignal(this.metronome$, { initialValue: 0 });
+  private running: Signal<boolean> = toSignal(this.running$, { initialValue: false });
 
   configure(config: MetronomeConfig) {
-    this.config = { ...config, signature: { ...config.signature } };
+    this.config.update(() => ({ ...config, signature: { ...config.signature } }));
   }
 
   getCurrentConfiguration() {
-    return { ...this.config, signature: { ...this.config.signature } };
+    return this.config;
   }
 
   start() {
-    this.started$.next(true);
-  }
-
-  pause() {
-
+    this.running$.next(true);
   }
 
   stop() {
-    this.started$.next(false);
+    this.running$.next(false);
   }
 
   getCounter(): Signal<number> {
@@ -45,9 +46,27 @@ export class MetronomeService {
     return this.metronome$.subscribe(callback);
   }
 
+  isRunning(): Signal<boolean> {
+    return this.running;
+  }
+
   private getMilliseconds(config: MetronomeConfig) {
     const milliseconds = 1000;
     const secondsPerMinute = 60;
     return (secondsPerMinute / config.beatsPerMinute) * milliseconds;
+  }
+
+  private buildMetronomeObs(running$: BehaviorSubject<boolean>): Observable<number> {
+    return running$.pipe(
+      switchMap((value) => {
+        const milliseconds = this.getMilliseconds(this.config());
+        return value
+          ? interval(milliseconds).pipe(
+              startWith(-1),
+              map((v) => v + 1),
+            )
+          : NEVER;
+      }),
+    );
   }
 }
