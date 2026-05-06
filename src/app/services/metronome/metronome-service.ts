@@ -24,6 +24,10 @@ export class MetronomeService {
 
   configure(config: MetronomeConfig) {
     this.config.update(() => ({ ...config, signature: { ...config.signature } }));
+    if(this.running()) {
+      this.stop();
+      this.start();
+    }
   }
 
   getCurrentConfiguration() {
@@ -31,11 +35,11 @@ export class MetronomeService {
   }
 
   start() {
-    this.running$.next(true);
+    this.runIt(true);
   }
 
   stop() {
-    this.running$.next(false);
+    this.runIt(false);
   }
 
   getCounter(): Signal<number> {
@@ -48,6 +52,10 @@ export class MetronomeService {
 
   isRunning(): Signal<boolean> {
     return this.running;
+  }
+
+  private runIt(val: boolean) {
+    this.running$.next(val);
   }
 
   private getMilliseconds(config: MetronomeConfig) {
