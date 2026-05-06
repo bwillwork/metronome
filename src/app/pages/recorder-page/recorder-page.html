@@ -1,1 +1,18 @@
-<p>tuner-page works!</p>
+<div class="d-flex flex-column justify-content-center align-items-center h-600">
+  <div>
+    <canvas #visualizer class="visualizer" height="50px"></canvas>
+  </div>
+  <div>
+    <button class="btn" [ngClass]="{
+      'btn-primary': !recording(),
+      'btn-dark': recording(),
+      }" (click)="((recording()) ? stop() : record())">{{(recording()) ? 'Stop' : 'Record'}}</button>
+  </div>
+</div>
+
+<div class="modal fade" [ngClass]="{
+  'show': showModal()
+}" tabindex="-1"  >
+<p>This is a test</p>
+  <button class="btn btn-primary" (click)="save()" >Save</button>
+</div>
