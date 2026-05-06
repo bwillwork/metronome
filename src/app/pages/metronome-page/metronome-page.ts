@@ -4,6 +4,8 @@ import { MetronomeService } from '../../services/metronome/metronome-service';
 import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MetronomeConfig } from '../../types/metronome';
+import { SoundService } from '../../services/sound/sound-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-metronome-page',
@@ -13,7 +15,10 @@ import { MetronomeConfig } from '../../types/metronome';
 })
 export class MetronomePage implements OnInit, OnDestroy {
   private metronomeService: MetronomeService = inject(MetronomeService);
-  public counter: Signal<number> = this.metronomeService.getCounter();
+  private soundService: SoundService = inject(SoundService);
+  private subs: Array<Subscription> = [];
+
+  //public counter: Signal<number> = this.metronomeService.getCounter();
   public running: Signal<boolean> = this.metronomeService.isRunning();
   public config: WritableSignal<MetronomeConfig> = this.metronomeService.getCurrentConfiguration();
 
@@ -22,6 +27,12 @@ export class MetronomePage implements OnInit, OnDestroy {
 
   public minBPMeasure = 1;
   public maxBPMeasure = 17;
+
+  ngOnInit(): void {
+    this.subs.push(this.metronomeService.subscribe(() => {
+      this.soundService.playClick();
+    }));
+  }
 
   start() {
     this.metronomeService.start();
@@ -56,7 +67,7 @@ export class MetronomePage implements OnInit, OnDestroy {
     }
   }
 
-  updateBeatsPerMeasure(event:any) {
+  updateBeatsPerMeasure(event: any) {
     const value = parseInt(event.target.value);
     const current = this.config();
     if (value < this.maxBPMeasure && value > this.minBPMeasure) {
@@ -65,7 +76,8 @@ export class MetronomePage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    while (this.subs.length > 0) this.subs.pop()?.unsubscribe();
+    this.subs = [];
+  }
 }

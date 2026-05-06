@@ -136,7 +136,10 @@ export class MetronomeDisplay implements AfterViewInit, OnDestroy {
     };
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    while(this.subs.length > 0) this.subs.pop()?.unsubscribe();
+    this.subs = [];
+  }
 }
 
 
