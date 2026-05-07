@@ -4,21 +4,18 @@ import {
   ElementRef,
   inject,
   signal,
-  Signal,
   ViewChild,
   WritableSignal,
 } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Subscription } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { RecordingModal } from '../../components/recording-modal/recording-modal';
 import { RecorderService } from '../../services/recorder/recorder-service';
 import { SafeResourceUrl } from '@angular/platform-browser';
-import { SafePipe } from '../../pipes/safe-pipe';
 
 @Component({
   selector: 'app-recorder-page',
-  imports: [NgClass, RecordingModal, SafePipe],
+  imports: [NgClass, RecordingModal],
   templateUrl: './recorder-page.html',
   styleUrl: './recorder-page.css',
 })
