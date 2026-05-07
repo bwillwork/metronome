@@ -2,11 +2,16 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">...</div>
-      <div class="modal-body">Native Modal Content</div>
+      <div class="modal-body">
+        <div>
+          <label>File Name: </label>
+        <input type="text" [(ngModel)]="filename" />
+        </div>
+      </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-secondary" (click)="submit()">Submit</button>
       </div>
     </div>
   </div>
 </div>
-<!--button (click)="openModal()">Open Modal</button-->
+

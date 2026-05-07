@@ -8,10 +8,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as bootstrap from 'bootstrap';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-recording-modal',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './recording-modal.html',
   styleUrl: './recording-modal.css',
 })
@@ -20,15 +21,20 @@ export class RecordingModal implements AfterViewInit {
   private modalInstance: any;
 
   open: InputSignal<boolean> = input(false);
+  onSubmit = output<{ filename: string }>();
 
-  data = output();
+  filename: string = "";
 
   constructor() {
     effect(() => {
-      const shouldOpen = this.open();
 
-      if(shouldOpen && this.modalInstance) this.modalInstance.show();
-      else this.modalInstance.hide();
+      const shouldOpen = this.open();
+      console.log('shit changed - ',shouldOpen);
+
+      if (this.modalInstance) {
+        if (shouldOpen) this.modalInstance.show();
+        else this.modalInstance.hide();
+      }
 
     });
   }
@@ -37,9 +43,10 @@ export class RecordingModal implements AfterViewInit {
     this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
   }
 
-  onSubmit() {
-
+  submit() {
+    const filename = `${this.filename}`;
+    this.filename = '';
+    this.modalInstance.hide();
+    this.onSubmit.emit({filename});
   }
-
-
 }

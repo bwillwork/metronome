@@ -8,6 +8,13 @@
       'btn-dark': recording(),
       }" (click)="((recording()) ? stop() : record())">{{(recording()) ? 'Stop' : 'Record'}}</button>
   </div>
+  <div>
+    <ul>
+      @for(file of audioFiles(); track $index) {
+        <li><span>{{file.filename}} - </span><audio controls [src]="file.audioURL"></audio></li>
+      }
+    </ul>
+  </div>
 </div>
 
-<app-recording-modal></app-recording-modal>
+<app-recording-modal [open]="openModal()" (onSubmit)="onSubmit($event)"></app-recording-modal>
