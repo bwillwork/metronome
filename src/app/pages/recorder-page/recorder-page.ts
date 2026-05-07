@@ -8,14 +8,15 @@ import {
   ViewChild,
   WritableSignal,
 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NgClass } from '@angular/common';
-import { NAVIGATOR } from '../../util/tokens';
+import { RecordingModal } from '../../components/recording-modal/recording-modal';
+import { RecorderService } from '../../services/recorder/recorder-service';
 
 @Component({
   selector: 'app-recorder-page',
-  imports: [NgClass],
+  imports: [NgClass, RecordingModal],
   templateUrl: './recorder-page.html',
   styleUrl: './recorder-page.css',
 })
@@ -23,49 +24,46 @@ export class RecorderPage implements AfterViewInit {
   @ViewChild('visualizer')
   public visualizerRef!: ElementRef<HTMLCanvasElement>;
 
-  private navigator: Navigator = inject(NAVIGATOR);
-  private recording$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private constraints: MediaStreamConstraints = { audio: true };
-  recording: Signal<boolean> = toSignal(this.recording$, { initialValue: false });
+  recording: WritableSignal<boolean> = signal(false);
   ready: WritableSignal<boolean> = signal(false);
-  showModal: WritableSignal<boolean> = signal(false);
 
-  private mediaRecorder?: MediaRecorder;
+  private recorderService: RecorderService = inject(RecorderService);
+  private subs: Array<Subscription> = [];
 
   ngAfterViewInit(): void {
-    navigator.mediaDevices.getUserMedia(this.constraints).then((stream: MediaStream) => {
-      this.mediaRecorder = new MediaRecorder(stream);
-      this.ready.update(() => true);
-    }, console.error);
+    this.recorderService.init();
+    this.subs.push(
+      this.recorderService.subscribeIsReady((isReady: boolean) => {
+        this.ready.update(() => isReady);
+      }),
+    );
+    this.subs.push(
+      this.recorderService.subscribeToRecording((isRecording: boolean) => {
+        console.log('isRecording: ', isRecording);
+        this.recording.update(() => isRecording);
+
+        this.openModal();
+
+      }),
+    );
   }
 
-  protected save() {
-    this.closeModal();
-  }
+  protected save() {}
 
   protected stop() {
-    console.log('stop')
+    console.log('stop');
     if (!this.ready()) return;
-    this.openModal();
+    this.recorderService.stop();
   }
 
   protected record() {
     if (!this.ready()) return;
-    if (!!this.mediaRecorder) {
-      this.recording$.next(true);
-      this.mediaRecorder.start();
-      console.log(this.mediaRecorder.state);
-      console.log('Recorder started.');
-    }
+    this.recorderService.record();
   }
 
-  private openModal() {
-    this.showModal.update(() => true);
-  }
+  private openModal() {}
 
-  private closeModal() {
-    this.showModal.update(() => false);
-  }
+  private closeModal() {}
 
   private success(stream: MediaStream) {}
   private error() {}
