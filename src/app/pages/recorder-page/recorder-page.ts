@@ -14,10 +14,11 @@ import { NgClass } from '@angular/common';
 import { RecordingModal } from '../../components/recording-modal/recording-modal';
 import { RecorderService } from '../../services/recorder/recorder-service';
 import { SafeResourceUrl } from '@angular/platform-browser';
+import { SafePipe } from '../../pipes/safe-pipe';
 
 @Component({
   selector: 'app-recorder-page',
-  imports: [NgClass, RecordingModal],
+  imports: [NgClass, RecordingModal, SafePipe],
   templateUrl: './recorder-page.html',
   styleUrl: './recorder-page.css',
 })

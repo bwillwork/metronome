@@ -19,8 +19,6 @@ export class RecorderService {
   private mediaRecorder?: MediaRecorder;
   private chunks: Array<Blob> = [];
 
-  private sanitizer: DomSanitizer = inject(DomSanitizer);
-
   init() {
     if (this.isReady()) return;
 
@@ -67,13 +65,10 @@ export class RecorderService {
 
   getAudioData() {
     if (this.mediaRecorder) {
-      const blob = new Blob(this.chunks, { type: this.mediaRecorder.mimeType });
+      const blob = new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' });
       this.chunks = [];
-      const url = URL.createObjectURL(blob);
-      const audioURL:SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      //const audioURL: string = this.window.URL.createObjectURL(blob);
       return {
-        audioURL,
+        audioURL: URL.createObjectURL(blob),
       };
     }
     return { audioURL: '' };
