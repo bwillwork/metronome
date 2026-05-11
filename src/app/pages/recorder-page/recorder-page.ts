@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   inject,
+  OnDestroy,
   signal,
   ViewChild,
   WritableSignal,
@@ -11,7 +12,8 @@ import { Subscription } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { RecordingModal } from '../../components/recording-modal/recording-modal';
 import { RecorderService } from '../../services/recorder/recorder-service';
-import { SafeResourceUrl } from '@angular/platform-browser';
+import { Recording } from '../../types/audio-files';
+import { AudioFileService } from '../../services/audio-file/audio-file-service';
 
 @Component({
   selector: 'app-recorder-page',
@@ -19,7 +21,7 @@ import { SafeResourceUrl } from '@angular/platform-browser';
   templateUrl: './recorder-page.html',
   styleUrl: './recorder-page.css',
 })
-export class RecorderPage implements AfterViewInit {
+export class RecorderPage implements AfterViewInit, OnDestroy {
   @ViewChild('visualizer')
   public visualizerRef!: ElementRef<HTMLCanvasElement>;
 
@@ -27,10 +29,13 @@ export class RecorderPage implements AfterViewInit {
   ready: WritableSignal<boolean> = signal(false);
   openModal: WritableSignal<boolean> = signal(false);
 
-  audioFiles: WritableSignal<Array<{ filename: string; audioURL: SafeResourceUrl }>> = signal([]);
+  audioFiles: WritableSignal<Array<Recording>> = signal([]);
 
   private recorderService: RecorderService = inject(RecorderService);
+  private audioFileService: AudioFileService = inject(AudioFileService);
   private subs: Array<Subscription> = [];
+
+  private isInitLoad: boolean = true;
 
   ngAfterViewInit(): void {
     this.recorderService.init();
@@ -41,14 +46,23 @@ export class RecorderPage implements AfterViewInit {
     );
     this.subs.push(
       this.recorderService.subscribeToRecording((isRecording: boolean) => {
-        console.log('isRecording: ', isRecording);
-        this.recording.update(() => isRecording);
-        if (!isRecording && this.ready()) {
-          console.log('open modal');
-          this.openModal.update(() => true);
+        if(!this.isInitLoad) {
+          console.log('isRecording: ', isRecording);
+          this.recording.update(() => isRecording);
+          if (!isRecording && this.ready()) {
+            console.log('open modal');
+            this.openModal.update(() => true);
+          } else {
+            this.openModal.update(() => false);
+          }
         } else {
-          this.openModal.update(() => false);
+          this.isInitLoad = false;
         }
+      }),
+    );
+    this.subs.push(
+      this.audioFileService.subscribeToRecordingChanges((recordings: Array<Recording>) => {
+        this.audioFiles.update(() => recordings);// Load on init
       }),
     );
   }
@@ -57,11 +71,7 @@ export class RecorderPage implements AfterViewInit {
     const { filename } = e;
     const { audioURL } = this.recorderService.getAudioData();
     console.log({ audioURL, filename });
-
-    const current = this.audioFiles();
-    this.audioFiles.update(() => [{ audioURL, filename }, ...current]);
-
-    console.log(this.audioFiles);
+    this.audioFileService.addRecording({ audioURL, filename });
   }
 
   protected stop() {
@@ -79,4 +89,9 @@ export class RecorderPage implements AfterViewInit {
 
   private success(stream: MediaStream) {}
   private error() {}
+  ngOnDestroy(): void {
+    this.recorderService.stopAndNoStateChange();
+    while (this.subs.length > 0) this.subs.pop()?.unsubscribe();
+    this.subs = [];
+  }
 }

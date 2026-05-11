@@ -77,6 +77,7 @@ export class MetronomePage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.metronomeService.stop();
     while (this.subs.length > 0) this.subs.pop()?.unsubscribe();
     this.subs = [];
   }

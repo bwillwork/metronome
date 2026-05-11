@@ -8,7 +8,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   providedIn: 'root',
 })
 export class RecorderService {
-  private window: Window = inject(WINDOW);
+  //private needsInit: WritableSignal<boolean> = signal(true);
   private navigator: Navigator = inject(NAVIGATOR);
   private isReady$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private isReady: Signal<boolean> = toSignal(this.isReady$, { initialValue: false });
@@ -63,10 +63,16 @@ export class RecorderService {
     return success;
   }
 
+  stopAndNoStateChange() {
+    if (this.isReady() && this.recording() && this.mediaRecorder) {
+      this.mediaRecorder.stop();
+    }
+  }
+
   getAudioData() {
     if (this.mediaRecorder) {
       const blob = new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' });
-      this.chunks = [];
+      this.resetAudioData();
       return {
         audioURL: URL.createObjectURL(blob),
       };
