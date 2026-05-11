@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { falseFunc, trueFunc } from '../../util/signals';
+import { log } from '../../util/logger';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class RecorderService {
 
   init() {
     if (this.isReady()) return;
-    console.log('----------------------------> init recording device');
+    log('----------------------------> init recording device');
     const onStop = (e: Event) => {
       this.recording.update(falseFunc);
     };
@@ -66,7 +67,7 @@ export class RecorderService {
 
   stopAndCleanUp() {
     if (this.isReady() && this.recording() && this.mediaRecorder) {
-      console.log('-------------====> cool bro');
+      log('-------------====> cool bro');
       this.mediaRecorder.stop();
       this.resetAudioData();
       this.recording.update(falseFunc);

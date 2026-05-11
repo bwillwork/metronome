@@ -9,16 +9,15 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { NgClass } from '@angular/common';
-import { RecordingModal } from '../../components/recording-modal/recording-modal';
+import { DOCUMENT, NgClass } from '@angular/common';
 import { RecorderService } from '../../services/recorder/recorder-service';
 import { Recording } from '../../types/audio-files';
 import { AudioFileService } from '../../services/audio-file/audio-file-service';
-import { falseFunc, trueFunc } from '../../util/signals';
+import { log } from '../../util/logger';
 
 @Component({
   selector: 'app-recorder-page',
-  imports: [NgClass, RecordingModal],
+  imports: [NgClass],
   templateUrl: './recorder-page.html',
   styleUrl: './recorder-page.css',
 })
@@ -28,7 +27,7 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
 
   recording: WritableSignal<boolean> = signal(false);
   ready: WritableSignal<boolean> = signal(false);
-  openModal: WritableSignal<boolean> = signal(false);
+  //openModal: WritableSignal<boolean> = signal(false);
 
   audioFiles: WritableSignal<Array<Recording>> = signal([]);
 
@@ -37,25 +36,32 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
   private subs: Array<Subscription> = [];
 
   private isInitLoad: boolean = true;
+  private document: Document = inject(DOCUMENT);
+
+  isRecording() {
+    return this.recording();
+  }
 
   ngAfterViewInit(): void {
-    console.log(' ========= After Init');
+    log(' ========= After Init');
     this.recorderService.init();
     this.subs.push(
       this.recorderService.subscribeIsReady((isReady: boolean) => {
-        this.ready.update(() => isReady);// Load on init
+        this.ready.update(() => isReady); // Load on init
       }),
     );
     this.subs.push(
       this.recorderService.subscribeToRecording((isRecording: boolean) => {
-        if(!this.isInitLoad) {
-          console.log('isRecording: ', isRecording);
+        if (!this.isInitLoad) {
+          log('isRecording: ', isRecording);
           this.recording.update(() => isRecording);
           if (!isRecording && this.ready()) {
-            console.log('open modal');
-            this.openModal.update(trueFunc);
-          } else {
-            this.openModal.update(falseFunc);
+            log('open modal');
+            //this.openModal.update(trueFunc);
+            const filename = prompt('Please enter a filename.', 'unnamed') ?? 'unnamed';
+            const { audioURL } = this.recorderService.getAudioData();
+            log({ audioURL, filename });
+            this.audioFileService.addRecording({ audioURL, filename });
           }
         } else {
           this.isInitLoad = false;
@@ -64,29 +70,45 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
     );
     this.subs.push(
       this.audioFileService.subscribeToRecordingChanges((recordings: Array<Recording>) => {
-        this.audioFiles.update(() => recordings);// Load on init
+        this.audioFiles.update(() => recordings); // Load on init
       }),
     );
   }
 
   deleteRecording(recording: Recording) {
-
-    this.audioFileService.removeRecording(recording);
+    const confirmed = confirm(
+      `Are you sure that you want to delete this recording? (${recording.filename}.ogg)`,
+    );
+    if (confirmed) {
+      URL.revokeObjectURL(recording.audioURL);
+      this.audioFileService.removeRecording(recording);
+    }
   }
 
-  downloadRecording() {
+  downloadRecording(recording: Recording) {
+    // Create a temporary download link
+    const url = recording.audioURL;
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${recording.filename}.ogg`; //'recorded_audio.webm';
+    this.document.body.appendChild(a);
+    a.click(); // Trigger download
 
+    // Clean up
+    this.document.body.removeChild(a);
   }
 
+  /*
   protected onSubmit(e: any) {
     const { filename } = e;
     const { audioURL } = this.recorderService.getAudioData();
-    console.log({ audioURL, filename });
+    log({ audioURL, filename });
     this.audioFileService.addRecording({ audioURL, filename });
   }
+   */
 
   protected stop() {
-    console.log('stop');
+    log('stop');
     if (!this.ready()) return;
     this.recorderService.stop();
   }
@@ -96,9 +118,8 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
     this.recorderService.record();
   }
 
-
   ngOnDestroy(): void {
-    console.log(' ========= Destroy');
+    log(' ========= Destroy');
     while (this.subs.length > 0) this.subs.pop()?.unsubscribe();
     this.subs = [];
     this.recorderService.stopAndCleanUp();

@@ -2,7 +2,7 @@ import { SafeResourceUrl } from '@angular/platform-browser';
 
 export type Recording = {
   filename: string,
-  audioURL: SafeResourceUrl
+  audioURL: string//SafeResourceUrl
 };
 
 export type AudioUpload = {
