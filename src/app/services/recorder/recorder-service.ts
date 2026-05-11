@@ -3,6 +3,7 @@ import { NAVIGATOR, WINDOW } from '../../util/tokens';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { falseFunc, trueFunc } from '../../util/signals';
 
 @Injectable({
   providedIn: 'root',
@@ -10,20 +11,20 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 export class RecorderService {
   //private needsInit: WritableSignal<boolean> = signal(true);
   private navigator: Navigator = inject(NAVIGATOR);
-  private isReady$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private isReady: Signal<boolean> = toSignal(this.isReady$, { initialValue: false });
+  private isReady: WritableSignal<boolean> = signal(false);
+  private isReady$: Observable<boolean> = toObservable(this.isReady);
 
-  private recording$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private recording: Signal<boolean> = toSignal(this.recording$, { initialValue: false });
+  private recording: WritableSignal<boolean> = signal(false);
+  private recording$: Observable<boolean> = toObservable(this.recording);
   private constraints: MediaStreamConstraints = { audio: true };
   private mediaRecorder?: MediaRecorder;
   private chunks: Array<Blob> = [];
 
   init() {
     if (this.isReady()) return;
-
+    console.log('----------------------------> init recording device');
     const onStop = (e: Event) => {
-      this.recording$.next(false);
+      this.recording.update(falseFunc);
     };
     const onDataAvailable = (e: BlobEvent) => {
       this.chunks.push(e.data);
@@ -35,7 +36,7 @@ export class RecorderService {
       this.mediaRecorder.onstop = onStop;
       this.mediaRecorder.ondataavailable = onDataAvailable;
 
-      this.isReady$.next(true);
+      this.isReady.update(trueFunc);
     }, console.error);
   }
 
@@ -43,7 +44,7 @@ export class RecorderService {
     let success = false;
     if (this.isReady() && !this.recording() && this.mediaRecorder) {
       this.mediaRecorder.start();
-      this.recording$.next(true);
+      this.recording.update(trueFunc);
       success = true;
     } else {
       this.error();
@@ -55,7 +56,7 @@ export class RecorderService {
     let success = false;
     if (this.isReady() && this.recording() && this.mediaRecorder) {
       this.mediaRecorder.stop();
-      this.recording$.next(false);
+      this.recording.update(falseFunc);
       success = true;
     } else {
       this.error();
@@ -63,9 +64,12 @@ export class RecorderService {
     return success;
   }
 
-  stopAndNoStateChange() {
+  stopAndCleanUp() {
     if (this.isReady() && this.recording() && this.mediaRecorder) {
+      console.log('-------------====> cool bro');
       this.mediaRecorder.stop();
+      this.resetAudioData();
+      this.recording.update(falseFunc);
     }
   }
 

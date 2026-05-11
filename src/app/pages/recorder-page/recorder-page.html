@@ -11,7 +11,7 @@
   <div>
     <ul>
       @for(file of audioFiles(); track $index) {
-        <li><span>{{file.filename}} - </span><audio controls [src]="file.audioURL"></audio></li>
+        <li><span>{{file.filename}} - </span><audio controls [src]="file.audioURL"></audio><span> - </span><button class="btn btn-danger">Delete</button></li>
       }
     </ul>
   </div>

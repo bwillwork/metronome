@@ -14,6 +14,7 @@ import { RecordingModal } from '../../components/recording-modal/recording-modal
 import { RecorderService } from '../../services/recorder/recorder-service';
 import { Recording } from '../../types/audio-files';
 import { AudioFileService } from '../../services/audio-file/audio-file-service';
+import { falseFunc, trueFunc } from '../../util/signals';
 
 @Component({
   selector: 'app-recorder-page',
@@ -38,10 +39,11 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
   private isInitLoad: boolean = true;
 
   ngAfterViewInit(): void {
+    console.log(' ========= After Init');
     this.recorderService.init();
     this.subs.push(
       this.recorderService.subscribeIsReady((isReady: boolean) => {
-        this.ready.update(() => isReady);
+        this.ready.update(() => isReady);// Load on init
       }),
     );
     this.subs.push(
@@ -51,9 +53,9 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
           this.recording.update(() => isRecording);
           if (!isRecording && this.ready()) {
             console.log('open modal');
-            this.openModal.update(() => true);
+            this.openModal.update(trueFunc);
           } else {
-            this.openModal.update(() => false);
+            this.openModal.update(falseFunc);
           }
         } else {
           this.isInitLoad = false;
@@ -65,6 +67,15 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
         this.audioFiles.update(() => recordings);// Load on init
       }),
     );
+  }
+
+  deleteRecording(recording: Recording) {
+
+    this.audioFileService.removeRecording(recording);
+  }
+
+  downloadRecording() {
+
   }
 
   protected onSubmit(e: any) {
@@ -85,13 +96,11 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
     this.recorderService.record();
   }
 
-  private closeModal() {}
 
-  private success(stream: MediaStream) {}
-  private error() {}
   ngOnDestroy(): void {
-    this.recorderService.stopAndNoStateChange();
+    console.log(' ========= Destroy');
     while (this.subs.length > 0) this.subs.pop()?.unsubscribe();
     this.subs = [];
+    this.recorderService.stopAndCleanUp();
   }
 }
