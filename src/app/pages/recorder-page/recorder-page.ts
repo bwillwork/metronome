@@ -27,8 +27,6 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
 
   recording: WritableSignal<boolean> = signal(false);
   ready: WritableSignal<boolean> = signal(false);
-  //openModal: WritableSignal<boolean> = signal(false);
-
   audioFiles: WritableSignal<Array<Recording>> = signal([]);
 
   private recorderService: RecorderService = inject(RecorderService);
@@ -86,26 +84,14 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
   }
 
   downloadRecording(recording: Recording) {
-    // Create a temporary download link
     const url = recording.audioURL;
     const a = document.createElement('a');
     a.href = url;
     a.download = `${recording.filename}.ogg`; //'recorded_audio.webm';
     this.document.body.appendChild(a);
     a.click(); // Trigger download
-
-    // Clean up
     this.document.body.removeChild(a);
   }
-
-  /*
-  protected onSubmit(e: any) {
-    const { filename } = e;
-    const { audioURL } = this.recorderService.getAudioData();
-    log({ audioURL, filename });
-    this.audioFileService.addRecording({ audioURL, filename });
-  }
-   */
 
   protected stop() {
     log('stop');

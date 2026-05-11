@@ -1,5 +1,10 @@
-const enabled: boolean = true;
+const loggingEnabled: boolean = true;
+const errorLoggingEnabled: boolean = true;
 
 export function log(...messages: Array<any>) {
-  if(enabled) console.log(...messages);
+  if(loggingEnabled) console.log(...messages);
+}
+
+export function error(...messages: Array<any>) {
+  if(errorLoggingEnabled) console.error(...messages);
 }

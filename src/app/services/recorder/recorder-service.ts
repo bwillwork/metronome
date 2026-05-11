@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { falseFunc, trueFunc } from '../../util/signals';
-import { log } from '../../util/logger';
+import { error, log } from '../../util/logger';
 
 @Injectable({
   providedIn: 'root',
@@ -98,6 +98,6 @@ export class RecorderService {
   }
 
   private error() {
-    console.error('The recorder needs to be initialized');
+    error('The recorder needs to be initialized');
   }
 }
