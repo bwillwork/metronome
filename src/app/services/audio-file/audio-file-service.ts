@@ -48,6 +48,25 @@ export class AudioFileService {
       this.uploads.update(() => result);
     }
   }
+  markUploadAsPlaying(upload: AudioUpload) {
+    const compare = this.buildAudioUploadCompareFunc(upload);
+    const index = this.uploads().findIndex(compare);
+    if (index !== -1) {
+      const result = [...this.uploads()];
+      result.forEach((a) => (a.isPlaying = false));
+      result[index].isPlaying = true;
+      this.uploads.update(() => result);
+    }
+  }
+  markUploadAsNotPlaying(upload: AudioUpload) {
+    const compare = this.buildAudioUploadCompareFunc(upload);
+    const index = this.uploads().findIndex(compare);
+    if (index !== -1) {
+      const result = [...this.uploads()];
+      result[index].isPlaying = false;
+      this.uploads.update(() => result);
+    }
+  }
   getUploads() {
     return [this.uploads()];
   }
@@ -60,6 +79,6 @@ export class AudioFileService {
   }
 
   private buildAudioUploadCompareFunc(upload: AudioUpload) {
-    return (u: AudioUpload) => u.path === upload.path && u.filename === upload.filename;
+    return (u: AudioUpload) => u.audioURL === upload.audioURL && u.filename === upload.filename;
   }
 }

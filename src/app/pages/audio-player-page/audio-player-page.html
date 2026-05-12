@@ -1,1 +1,27 @@
-<p>audio-player-page works!</p>
+<div class="d-flex flex-column justify-content-center align-items-center h-600">
+  <div>
+    <!-- Player -->
+  </div>
+
+  <div>
+    <!-- Playlist list -->
+    <ul>
+      @for(upload of playlist(); track $index) {
+        <li>
+          <button class="btn" [ngClass]="{
+            'btn-primary': !upload.isPlaying,
+            'btn-dark': upload.isPlaying,
+            }" (click)="((upload.isPlaying) ? stop(upload) : play(upload))">{{(upload.isPlaying) ? 'Stop' : 'Play'}}</button>
+          <span> | </span>
+          <span>{{upload.filename}}</span>
+          <span> | </span>
+          <button class="btn btn-primary" (click)="removeFromPlaylist(upload)">Delete</button>
+        </li>
+      }
+    </ul>
+  </div>
+  <div>
+    <input type="file" (change)="uploadFiles($event)" accept="audio/*" multiple/>
+  </div>
+
+</div>

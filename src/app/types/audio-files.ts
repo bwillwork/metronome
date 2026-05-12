@@ -7,6 +7,7 @@ export type Recording = {
 
 export type AudioUpload = {
   filename: string,
-  path: string,
+  audioURL: string,
+  isPlaying: boolean
 };
 

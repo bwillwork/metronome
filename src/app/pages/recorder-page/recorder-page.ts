@@ -27,7 +27,7 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
 
   recording: WritableSignal<boolean> = signal(false);
   ready: WritableSignal<boolean> = signal(false);
-  audioFiles: WritableSignal<Array<Recording>> = signal([]);
+  recordings: WritableSignal<Array<Recording>> = signal([]);
 
   private recorderService: RecorderService = inject(RecorderService);
   private audioFileService: AudioFileService = inject(AudioFileService);
@@ -68,7 +68,7 @@ export class RecorderPage implements AfterViewInit, OnDestroy {
     );
     this.subs.push(
       this.audioFileService.subscribeToRecordingChanges((recordings: Array<Recording>) => {
-        this.audioFiles.update(() => recordings); // Load on init
+        this.recordings.update(() => recordings); // Load on init
       }),
     );
   }

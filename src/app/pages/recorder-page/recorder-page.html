@@ -10,14 +10,17 @@
   </div>
   <div>
     <ul>
-      @for(file of audioFiles(); track $index) {
-        <li><span>{{file.filename}} - </span><audio controls [src]="file.audioURL"></audio><span> - </span><button class="btn btn-danger" (click)="deleteRecording(file)">Delete</button><button (click)="downloadRecording(file)">Download</button></li>
+      @for(file of recordings(); track $index) {
+        <li>
+          <span>{{file.filename}} - </span>
+          <audio controls [src]="file.audioURL"></audio>
+          <span> - </span>
+          <button class="btn btn-danger" (click)="deleteRecording(file)">Delete</button>
+          <button class="btn btn-primary" (click)="downloadRecording(file)">Download</button>
+        </li>
       }
     </ul>
   </div>
 </div>
 
-<!--
-<app-recording-modal [open]="openModal()" (onSubmit)="onSubmit($event)"></app-recording-modal>
--->
 
