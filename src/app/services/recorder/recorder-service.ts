@@ -1,8 +1,7 @@
-import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
-import { NAVIGATOR, WINDOW } from '../../util/tokens';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { NAVIGATOR } from '../../util/tokens';
+import { Observable, Subscription } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { falseFunc, trueFunc } from '../../util/signals';
 import { error, log } from '../../util/logger';
 
@@ -10,7 +9,6 @@ import { error, log } from '../../util/logger';
   providedIn: 'root',
 })
 export class RecorderService {
-  //private needsInit: WritableSignal<boolean> = signal(true);
   private navigator: Navigator = inject(NAVIGATOR);
   private isReady: WritableSignal<boolean> = signal(false);
   private isReady$: Observable<boolean> = toObservable(this.isReady);

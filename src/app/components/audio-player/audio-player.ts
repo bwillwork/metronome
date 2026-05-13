@@ -1,4 +1,12 @@
-import { Component, computed, effect, ElementRef, input, signal, ViewChild, WritableSignal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  input,
+  signal,
+  ViewChild,
+  WritableSignal,
+} from '@angular/core';
 import { AudioUpload } from '../../types/audio-files';
 import { log } from '../../util/logger';
 import { falseFunc, trueFunc } from '../../util/signals';
@@ -11,12 +19,12 @@ import { falseFunc, trueFunc } from '../../util/signals';
 })
 export class AudioPlayer {
   @ViewChild('audioPlayer')
-  audioElm!: ElementRef<HTMLAudioElement>;
+  audioRef!: ElementRef<HTMLAudioElement>;
 
   upload = input<AudioUpload | undefined>(undefined);
   hasUpload = computed(() => !!this.upload());
   canPlay = computed(() => {
-    return this.hasUpload() && !!this.audioElm;
+    return this.hasUpload() && !!this.audioRef;
   });
 
   private isPlaying: WritableSignal<boolean> = signal(false);
@@ -39,7 +47,7 @@ export class AudioPlayer {
 
   loaded(event: any) {
     log('loaded: ', event, this.canPlay());
-    if(this.canPlay()) this.audioElm.nativeElement.play();
+    if (this.canPlay()) this.audioRef.nativeElement.play();
   }
 
   volumechange(event: any) {

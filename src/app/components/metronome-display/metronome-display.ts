@@ -4,7 +4,6 @@ import {
   effect,
   ElementRef,
   inject,
-  input,
   OnDestroy,
   Signal,
   ViewChild,
@@ -47,7 +46,7 @@ export class MetronomeDisplay implements AfterViewInit, OnDestroy {
     this.height = this.length;
     effect(() => {
       const current = this.config();
-      if(this.ctx && current.beatsPerMinute > 0) this.draw(this.ctx, 0, true);
+      if (this.ctx && current.beatsPerMinute > 0) this.draw(this.ctx, 0, true);
     });
   }
 
@@ -135,7 +134,7 @@ export class MetronomeDisplay implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    while(this.subs.length > 0) this.subs.pop()?.unsubscribe();
+    while (this.subs.length > 0) this.subs.pop()?.unsubscribe();
     this.subs = [];
   }
 }

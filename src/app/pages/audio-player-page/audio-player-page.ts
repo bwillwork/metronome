@@ -3,12 +3,11 @@ import { AudioFileService } from '../../services/audio-file/audio-file-service';
 import { AudioUpload } from '../../types/audio-files';
 import { log } from '../../util/logger';
 import { Subscription } from 'rxjs';
-import { NgClass } from '@angular/common';
 import { AudioPlayer } from '../../components/audio-player/audio-player';
 
 @Component({
   selector: 'app-audio-player-page',
-  imports: [NgClass, AudioPlayer],
+  imports: [AudioPlayer],
   templateUrl: './audio-player-page.html',
   styleUrl: './audio-player-page.css',
 })
@@ -51,7 +50,7 @@ export class AudioPlayerPage {
   }
 
   private areEqual(upload: AudioUpload | undefined, other: AudioUpload | undefined) {
-    if(upload && other) {
+    if (upload && other) {
       return upload.filename === other?.filename && upload.audioURL === other.audioURL;
     }
     return false;
