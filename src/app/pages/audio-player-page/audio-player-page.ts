@@ -39,6 +39,8 @@ export class AudioPlayerPage {
       `Are you sure that you want to remove this upload? (${upload.filename})`,
     );
     if (confirmed) {
+      const isCurrentFile = this.areEqual(upload, this.currentlyPlaying());
+      if (isCurrentFile) this.currentlyPlaying.update(() => undefined);
       URL.revokeObjectURL(upload.audioURL);
       this.audioFileService.removeUpload(upload);
     }
@@ -50,5 +52,12 @@ export class AudioPlayerPage {
   pause() {}
   stop(upload: AudioUpload) {
     this.audioFileService.markUploadAsNotPlaying(upload);
+  }
+
+  private areEqual(upload: AudioUpload | undefined, other: AudioUpload | undefined) {
+    if(upload && other) {
+      return upload.filename === other?.filename && upload.audioURL === other.audioURL;
+    }
+    return false;
   }
 }
