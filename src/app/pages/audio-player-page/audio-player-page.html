@@ -1,18 +1,18 @@
 <div class="d-flex flex-column justify-content-center align-items-center h-600">
   <div>
     <!-- Player -->
-    <app-audio-player [upload]="currentlyPlaying()" ></app-audio-player>
+    <app-audio-player [upload]="currentlyPlaying()"></app-audio-player>
   </div>
-
   <div>
     <!-- Playlist list -->
     <ul>
       @for(upload of playlist(); track $index) {
         <li>
-          <button class="btn" [ngClass]="{
-            'btn-primary': !upload.isPlaying,
-            'btn-dark': upload.isPlaying,
-            }" (click)="((upload.isPlaying) ? stop(upload) : play(upload))">{{(upload.isPlaying) ? 'Stop' : 'Play'}}</button>
+          @if(upload.isPlaying) {
+            <span>Is Chosen</span>
+          } @else {
+            <button class="btn btn-primary" (click)="play(upload)">Play</button>
+          }
           <span> | </span>
           <span>{{upload.filename}}</span>
           <span> | </span>

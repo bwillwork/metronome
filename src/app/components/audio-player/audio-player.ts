@@ -37,10 +37,6 @@ export class AudioPlayer {
     if (this.isPlaying()) this.isPlaying.update(falseFunc);
   }
 
-  change(event: any) {
-    log('change: ', event);
-  }
-
   loaded(event: any) {
     log('loaded: ', event, this.canPlay());
     if(this.canPlay()) this.audioElm.nativeElement.play();
