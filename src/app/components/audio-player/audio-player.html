@@ -1,8 +1,18 @@
+@if(hasUpload()) {
 <div>
-  <button>Back</button>
-  <button class="btn" [ngClass]="{
-            'btn-primary': !upload.isPlaying,
-            'btn-dark': upload.isPlaying,
-            }" (click)="((upload.isPlaying) ? stop(upload) : play(upload))">{{(upload.isPlaying) ? 'Stop' : 'Play'}}</button>
-  <button>Back</button>
+  <p>Title: {{upload()?.filename ?? ''}}</p>
+  <audio
+    #audioPlayer
+    [src]="upload()?.audioURL ?? ''"
+    (play)="play($event)"
+    (playing)="playing($event)"
+    (pause)="pause($event)"
+    (ended)="ended($event)"
+    (volumechange)="volumechange($event)"
+    (change)="change($event)"
+    (loadeddata)="loaded($event)"
+    controls></audio>
 </div>
+} @else {
+  <p>Nothing to play</p>
+}

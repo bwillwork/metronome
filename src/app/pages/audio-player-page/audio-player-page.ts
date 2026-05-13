@@ -4,10 +4,11 @@ import { AudioUpload } from '../../types/audio-files';
 import { log } from '../../util/logger';
 import { Subscription } from 'rxjs';
 import { NgClass } from '@angular/common';
+import { AudioPlayer } from '../../components/audio-player/audio-player';
 
 @Component({
   selector: 'app-audio-player-page',
-  imports: [NgClass],
+  imports: [NgClass, AudioPlayer],
   templateUrl: './audio-player-page.html',
   styleUrl: './audio-player-page.css',
 })
@@ -15,6 +16,7 @@ export class AudioPlayerPage {
   private audioFileService: AudioFileService = inject(AudioFileService);
   private subs: Array<Subscription> = [];
   playlist: WritableSignal<Array<AudioUpload>> = signal([]);
+  currentlyPlaying: WritableSignal<AudioUpload | undefined> = signal(undefined);
 
   constructor() {
     this.subs.push(
@@ -42,6 +44,7 @@ export class AudioPlayerPage {
     }
   }
   play(upload: AudioUpload) {
+    this.currentlyPlaying.update(() => upload)
     this.audioFileService.markUploadAsPlaying(upload);
   }
   pause() {}

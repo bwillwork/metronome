@@ -1,5 +1,7 @@
-import { Component, input, InputSignal } from '@angular/core';
+import { Component, computed, effect, ElementRef, input, signal, ViewChild, WritableSignal } from '@angular/core';
 import { AudioUpload } from '../../types/audio-files';
+import { log } from '../../util/logger';
+import { falseFunc, trueFunc } from '../../util/signals';
 
 @Component({
   selector: 'app-audio-player',
@@ -8,5 +10,43 @@ import { AudioUpload } from '../../types/audio-files';
   styleUrl: './audio-player.css',
 })
 export class AudioPlayer {
-  audioUpload: InputSignal<AudioUpload | undefined> = input<AudioUpload | undefined>();
+  @ViewChild('audioPlayer')
+  public audioElm!: ElementRef<HTMLAudioElement>;
+
+  upload = input<AudioUpload | undefined>(undefined);
+  hasUpload = computed(() => !!this.upload());
+  canPlay = computed(() => {
+    return this.hasUpload() && !!this.audioElm;
+  });
+
+  private isPlaying: WritableSignal<boolean> = signal(false);
+
+  play(event: any) {
+    log('play: ', event);
+  }
+  playing(event: any) {
+    log('playing: ', event);
+    if (!this.isPlaying()) this.isPlaying.update(trueFunc);
+  }
+  pause(event: any) {
+    log('pause: ', event);
+    if (this.isPlaying()) this.isPlaying.update(falseFunc);
+  }
+  ended(event: any) {
+    log('ended: ', event);
+    if (this.isPlaying()) this.isPlaying.update(falseFunc);
+  }
+
+  change(event: any) {
+    log('change: ', event);
+  }
+
+  loaded(event: any) {
+    log('loaded: ', event, this.canPlay());
+    if(this.canPlay()) this.audioElm.nativeElement.play();
+  }
+
+  volumechange(event: any) {
+    log('volumechange: ', event);
+  }
 }
