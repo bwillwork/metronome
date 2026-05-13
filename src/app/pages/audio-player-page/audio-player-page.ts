@@ -49,6 +49,7 @@ export class AudioPlayerPage {
     this.currentlyPlaying.update(() => upload)
     this.audioFileService.markUploadAsPlaying(upload);
   }
+
   pause() {}
   stop(upload: AudioUpload) {
     this.audioFileService.markUploadAsNotPlaying(upload);
