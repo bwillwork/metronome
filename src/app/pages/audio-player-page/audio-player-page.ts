@@ -31,7 +31,7 @@ export class AudioPlayerPage {
       log('f -> ', f, f.name);
       const filename = f.name;
       const audioURL = URL.createObjectURL(f);
-      this.audioFileService.addUpload({ filename, audioURL, isPlaying: false });
+      this.audioFileService.addUpload({ filename, audioURL, isChosen: false });
     }
   }
   removeFromPlaylist(upload: AudioUpload) {
@@ -45,14 +45,9 @@ export class AudioPlayerPage {
       this.audioFileService.removeUpload(upload);
     }
   }
-  play(upload: AudioUpload) {
-    this.currentlyPlaying.update(() => upload)
-    this.audioFileService.markUploadAsPlaying(upload);
-  }
-
-  pause() {}
-  stop(upload: AudioUpload) {
-    this.audioFileService.markUploadAsNotPlaying(upload);
+  choose(upload: AudioUpload) {
+    this.currentlyPlaying.update(() => upload);
+    this.audioFileService.markUploadAsChosen(upload);
   }
 
   private areEqual(upload: AudioUpload | undefined, other: AudioUpload | undefined) {

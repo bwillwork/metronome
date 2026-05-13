@@ -8,10 +8,10 @@
     <ul>
       @for(upload of playlist(); track $index) {
         <li>
-          @if(upload.isPlaying) {
+          @if(upload.isChosen) {
             <span>Is Chosen</span>
           } @else {
-            <button class="btn btn-primary" (click)="play(upload)">Play</button>
+            <button class="btn btn-primary" (click)="choose(upload)">Play</button>
           }
           <span> | </span>
           <span>{{upload.filename}}</span>

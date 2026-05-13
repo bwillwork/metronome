@@ -11,7 +11,7 @@ import { falseFunc, trueFunc } from '../../util/signals';
 })
 export class AudioPlayer {
   @ViewChild('audioPlayer')
-  public audioElm!: ElementRef<HTMLAudioElement>;
+  audioElm!: ElementRef<HTMLAudioElement>;
 
   upload = input<AudioUpload | undefined>(undefined);
   hasUpload = computed(() => !!this.upload());

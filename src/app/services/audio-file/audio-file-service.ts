@@ -27,9 +27,6 @@ export class AudioFileService {
       this.recordings.update(() => result);
     }
   }
-  getRecordings() {
-    return [...this.recordings()];
-  }
   subscribeToRecordingChanges(callback: (recordings: Array<Recording>) => void) {
     return this.recordings$.subscribe(callback);
   }
@@ -48,27 +45,15 @@ export class AudioFileService {
       this.uploads.update(() => result);
     }
   }
-  markUploadAsPlaying(upload: AudioUpload) {
+  markUploadAsChosen(upload: AudioUpload) {
     const compare = this.buildAudioUploadCompareFunc(upload);
     const index = this.uploads().findIndex(compare);
     if (index !== -1) {
       const result = [...this.uploads()];
-      result.forEach((a) => (a.isPlaying = false));
-      result[index].isPlaying = true;
+      result.forEach((a) => (a.isChosen = false));
+      result[index].isChosen = true;
       this.uploads.update(() => result);
     }
-  }
-  markUploadAsNotPlaying(upload: AudioUpload) {
-    const compare = this.buildAudioUploadCompareFunc(upload);
-    const index = this.uploads().findIndex(compare);
-    if (index !== -1) {
-      const result = [...this.uploads()];
-      result[index].isPlaying = false;
-      this.uploads.update(() => result);
-    }
-  }
-  getUploads() {
-    return [this.uploads()];
   }
   subscribeToUploadChanges(callback: (recordings: Array<AudioUpload>) => void) {
     return this.uploads$.subscribe(callback);
