@@ -1,1 +1,8 @@
-<p>audio-player works!</p>
+<div>
+  <button>Back</button>
+  <button class="btn" [ngClass]="{
+            'btn-primary': !upload.isPlaying,
+            'btn-dark': upload.isPlaying,
+            }" (click)="((upload.isPlaying) ? stop(upload) : play(upload))">{{(upload.isPlaying) ? 'Stop' : 'Play'}}</button>
+  <button>Back</button>
+</div>

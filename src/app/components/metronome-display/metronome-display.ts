@@ -28,8 +28,6 @@ export class MetronomeDisplay implements AfterViewInit, OnDestroy {
   public width;
   public height;
 
-  public beatsPerMinute = input();
-
   private started$ = new BehaviorSubject(false);
   private metronome$: Observable<number> = this.started$.pipe(
     switchMap((value) => {
