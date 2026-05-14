@@ -25,8 +25,8 @@ export class MetronomePage implements OnInit, OnDestroy {
   public minBPMinute = 1;
   public maxBPMinute = 250;
 
-  public minBPMeasure = 1;
-  public maxBPMeasure = 17;
+  public minBPMeasure = 2;
+  public maxBPMeasure = 16;
 
   ngOnInit(): void {
     this.subs.push(this.metronomeService.subscribe(() => {
@@ -70,7 +70,7 @@ export class MetronomePage implements OnInit, OnDestroy {
   updateBeatsPerMeasure(event: any) {
     const value = parseInt(event.target.value);
     const current = this.config();
-    if (value < this.maxBPMeasure && value > this.minBPMeasure) {
+    if (value <= this.maxBPMeasure && value >= this.minBPMeasure) {
       current.signature.beatsPerMeasure = value;
       this.metronomeService.configure(current);
     }
