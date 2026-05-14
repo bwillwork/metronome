@@ -9,17 +9,16 @@
       }" (click)="((recording()) ? stop() : record())">{{(recording()) ? 'Stop' : 'Record'}}</button>
   </div>
   <div>
-    <ul>
+
       @for(file of recordings(); track $index) {
-        <li>
-          <span>{{file.filename}} - </span>
-          <audio controls [src]="file.audioURL"></audio>
-          <span> - </span>
+        <div>
+          <!--audio controls [src]="file.audioURL"></audio-->
+          <app-audio-player [upload]="file" [autoPlay]="false"></app-audio-player>
           <button class="btn btn-danger" (click)="deleteRecording(file)">Delete</button>
           <button class="btn btn-primary" (click)="downloadRecording(file)">Download</button>
-        </li>
+        </div>
       }
-    </ul>
+
   </div>
 </div>
 

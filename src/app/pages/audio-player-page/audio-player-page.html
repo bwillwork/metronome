@@ -5,6 +5,7 @@
   </div>
   <div>
     <!-- Playlist list -->
+    <h2>Playlist</h2>
     <ul>
       @for(upload of playlist(); track $index) {
         <li>
@@ -16,7 +17,7 @@
           <span> | </span>
           <span>{{upload.filename}}</span>
           <span> | </span>
-          <button class="btn btn-primary" (click)="removeFromPlaylist(upload)">Delete</button>
+          <button class="btn btn-danger" (click)="removeFromPlaylist(upload)">Delete</button>
         </li>
       }
     </ul>

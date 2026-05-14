@@ -14,10 +14,11 @@ import { RecorderService } from '../../services/recorder/recorder-service';
 import { Recording } from '../../types/audio-files';
 import { AudioFileService } from '../../services/audio-file/audio-file-service';
 import { log } from '../../util/logger';
+import { AudioPlayer } from '../../components/audio-player/audio-player';
 
 @Component({
   selector: 'app-recorder-page',
-  imports: [NgClass],
+  imports: [NgClass, AudioPlayer],
   templateUrl: './recorder-page.html',
   styleUrl: './recorder-page.css',
 })

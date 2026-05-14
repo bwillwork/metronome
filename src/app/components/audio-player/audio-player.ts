@@ -7,7 +7,7 @@ import {
   ViewChild,
   WritableSignal,
 } from '@angular/core';
-import { AudioUpload } from '../../types/audio-files';
+import { AudioUpload, Recording } from '../../types/audio-files';
 import { log } from '../../util/logger';
 import { falseFunc, trueFunc } from '../../util/signals';
 
@@ -21,7 +21,8 @@ export class AudioPlayer {
   @ViewChild('audioPlayer')
   audioRef!: ElementRef<HTMLAudioElement>;
 
-  upload = input<AudioUpload | undefined>(undefined);
+  upload = input<AudioUpload | Recording | undefined>(undefined);
+  autoPlay = input<boolean>(true);
   hasUpload = computed(() => !!this.upload());
   canPlay = computed(() => {
     return this.hasUpload() && !!this.audioRef;
@@ -47,7 +48,7 @@ export class AudioPlayer {
 
   loaded(event: any) {
     log('loaded: ', event, this.canPlay());
-    if (this.canPlay()) this.audioRef.nativeElement.play();
+    if (this.canPlay() && this.autoPlay()) this.audioRef.nativeElement.play();
   }
 
   volumechange(event: any) {
