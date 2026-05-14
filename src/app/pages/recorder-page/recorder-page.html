@@ -3,7 +3,7 @@
     <canvas #visualizer class="visualizer" height="50px"></canvas>
   </div>
   <div>
-    <button class="btn" [ngClass]="{
+    <button class="btn btn-outline-dark" [ngClass]="{
       'btn-primary': !recording(),
       'btn-dark': recording(),
       }" (click)="((recording()) ? stop() : record())">{{(recording()) ? 'Stop' : 'Record'}}</button>
@@ -14,8 +14,8 @@
         <div>
           <!--audio controls [src]="file.audioURL"></audio-->
           <app-audio-player [upload]="file" [autoPlay]="false"></app-audio-player>
-          <button class="btn btn-danger" (click)="deleteRecording(file)">Delete</button>
-          <button class="btn btn-primary" (click)="downloadRecording(file)">Download</button>
+          <button class="btn btn-danger btn-outline-dark btn-text-white" (click)="deleteRecording(file)">Delete</button>
+          <button class="btn btn-primary btn-outline-dark" (click)="downloadRecording(file)">Download</button>
         </div>
       }
 

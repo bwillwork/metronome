@@ -1,0 +1,5 @@
+<div class="d-flex justify-content-center align-items-center">
+  <button class="btn " (click)="minus($event)">Minus</button>
+  <input class="form-range" type="range" [value]="value()" (change)="onChange($event)" [min]="min()" [max]="max()"/>
+  <button class="btn" (click)="plus($event)">Plus</button>
+</div>

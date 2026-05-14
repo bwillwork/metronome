@@ -4,7 +4,7 @@
   </div>
   <div class="d-flex flex-column justify-content-center align-items-center">
     <div>
-      <button class="btn" [ngClass]="{
+      <button class="btn btn-outline-dark" [ngClass]="{
       'btn-primary': !running(),
       'btn-dark': running(),
       }" (click)="((running()) ? stop() : start())">{{(running()) ? 'Stop' : 'Start'}}</button>
@@ -12,8 +12,8 @@
     </div>
     <div>
       <label>Beats Per Min: </label>
-      <button class="btn" (click)="minus()">Minus</button>
-      <input type="range" [value]="config().beatsPerMinute" (change)="rangeChange($event)" [min]="minBPMinute" [max]="maxBPMinute"/>
+      <button class="btn " (click)="minus()">Minus</button>
+      <input class="form-range" type="range" [value]="config().beatsPerMinute" (change)="rangeChange($event)" [min]="minBPMinute" [max]="maxBPMinute"/>
       <button class="btn" (click)="plus()">Plus</button>
     </div>
     <div>

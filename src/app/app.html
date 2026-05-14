@@ -10,19 +10,52 @@
   </div>
   <div class="row">
     <div class="col">
-      <ul class="nav nav-underline justify-content-center" id="myTab" role="tablist">
+      <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
         <li class="nav-item w-25" role="presentation">
-          <a routerLink="/metronome" routerLinkActive="active" class="nav-link w-100 text-center" id="metronome-tab" type="button" role="tab" aria-controls="home-tab-pane">
+          <a
+            routerLink="/metronome"
+            routerLinkActive="active"
+            #rla="routerLinkActive"
+            class="nav-link w-100 text-center"
+            [ngClass]="{
+              'bg-dark': rla.isActive
+            }"
+            id="metronome-tab"
+            type="button"
+            role="tab"
+            aria-controls="home-tab-pane">
             Metronome
           </a>
         </li>
         <li class="nav-item w-25" role="presentation">
-          <a routerLink="/recorder" routerLinkActive="active" class="nav-link w-100 text-center" id="tuner-tab"  type="button" role="tab" aria-controls="profile-tab-pane">
+          <a
+            routerLink="/recorder"
+            routerLinkActive="active"
+            #rla2="routerLinkActive"
+            class="nav-link w-100 text-center"
+            [ngClass]="{
+              'bg-dark': rla2.isActive
+            }"
+            id="tuner-tab"
+            type="button"
+            role="tab"
+            aria-controls="profile-tab-pane">
             Recorder
           </a>
         </li>
         <li class="nav-item w-25" role="presentation">
-          <a routerLink="/audio" routerLinkActive="active" class="nav-link w-100 text-center" id="audio-player-tab"  type="button" role="tab" aria-controls="profile-tab-pane">
+          <a
+            routerLink="/audio"
+            routerLinkActive="active"
+            #rla3="routerLinkActive"
+            class="nav-link w-100 text-center"
+            [ngClass]="{
+              'bg-dark': rla3.isActive
+            }"
+            id="audio-player-tab"
+            type="button"
+            role="tab"
+            aria-controls="profile-tab-pane">
             Audio Player
           </a>
         </li>

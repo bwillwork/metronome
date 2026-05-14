@@ -12,12 +12,12 @@
           @if(upload.isChosen) {
             <span>Is Chosen</span>
           } @else {
-            <button class="btn btn-primary" (click)="choose(upload)">Play</button>
+            <button class="btn btn-primary btn-outline-dark" (click)="choose(upload)">Play</button>
           }
           <span> | </span>
           <span>{{upload.filename}}</span>
           <span> | </span>
-          <button class="btn btn-danger" (click)="removeFromPlaylist(upload)">Delete</button>
+          <button class="btn btn-danger btn-outline-dark" (click)="removeFromPlaylist(upload)">Delete</button>
         </li>
       }
     </ul>

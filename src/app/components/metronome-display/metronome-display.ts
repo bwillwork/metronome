@@ -11,7 +11,7 @@ import {
 import { BehaviorSubject, interval, NEVER, Observable, Subscription, switchMap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MetronomeService } from '../../services/metronome/metronome-service';
-import { CircleData, Point } from '../../types/canvas';
+import { CircleData, COLORS, Point } from '../../types/canvas';
 
 @Component({
   selector: 'app-metronome-display',
@@ -76,7 +76,7 @@ export class MetronomeDisplay implements AfterViewInit, OnDestroy {
     const mainCircle = {
       c: center,
       r: this.length / 2 - padding * 2,
-      color: '#ccc',
+      color: COLORS.surface,
       name: bpmReadout,
     };
 
@@ -89,9 +89,9 @@ export class MetronomeDisplay implements AfterViewInit, OnDestroy {
       const coords = this.radsToDegrees(rads, center, mainCircle.r);
       let color: string;
       if (isIdol) {
-        color = '#fff';
+        color = COLORS.white;
       } else {
-        color = i <= countMod ? 'skyblue' : '#ffffff';
+        color = i <= countMod ? COLORS.primary : COLORS.white;
       }
       const circle = {
         c: coords,
@@ -105,7 +105,7 @@ export class MetronomeDisplay implements AfterViewInit, OnDestroy {
 
   private drawCircle(ctx: CanvasRenderingContext2D, circle: CircleData) {
     ctx.beginPath();
-    ctx.strokeStyle = 'black';
+    ctx.strokeStyle = COLORS.text;
     ctx.lineWidth = 5;
 
     ctx.arc(circle.c.x, circle.c.y, circle.r, 0, (Math.PI / 180) * 360, false);
@@ -117,7 +117,7 @@ export class MetronomeDisplay implements AfterViewInit, OnDestroy {
     if (circle.name) {
       const height = 20;
       ctx.font = `${height}px serif`;
-      ctx.fillStyle = '#222';
+      ctx.fillStyle = COLORS.text;
       const width = ctx.measureText(circle.name).width;
       const x = circle.c.x - width / 2;
       const y = circle.c.y + height / 2;

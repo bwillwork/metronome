@@ -61,7 +61,7 @@ export class MetronomePage implements OnInit, OnDestroy {
   rangeChange(event: any) {
     const value = parseInt(event.target.value);
     const current = this.config();
-    if (value < this.maxBPMinute && value > this.minBPMinute) {
+    if (value <= this.maxBPMinute && value >= this.minBPMinute) {
       current.beatsPerMinute = value;
       this.metronomeService.configure(current);
     }
