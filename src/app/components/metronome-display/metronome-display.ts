@@ -65,7 +65,7 @@ export class MetronomeDisplay implements AfterViewInit, OnDestroy {
   private draw(ctx: CanvasRenderingContext2D, count: number, isIdol: boolean) {
     ctx.clearRect(0, 0, this.width, this.height);
 
-    const bpmReadout = `${this.config().beatsPerMinute} bpm`;
+    const bpmReadout = `${this.config().beatsPerMinute} beats per minute`;
     const padding = 20;
 
     const center: Point = {

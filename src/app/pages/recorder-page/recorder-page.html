@@ -11,14 +11,38 @@
   </div>
   <div >
     <div class="container">
-      @for(file of recordings(); track $index) {
+
+      @if(recordings().length === 0 && !recording()) {
         <div class="row">
           <div class="col">
-            <app-audio-player [upload]="file" [autoPlay]="false"></app-audio-player>
-            <button class="btn btn-dark btn-outline-dark btn-text-white" (click)="deleteRecording(file)">Delete</button>
-            <button class="btn btn-primary btn-outline-dark" (click)="downloadRecording(file)">Download</button>
+            <p>There are no recordings yet</p>
           </div>
         </div>
+      }
+
+      @if(recording()) {
+        <div class="row">
+          <div class="col d-flex justify-content-center">
+            <span class="position-relative">
+              <span class="position-absolute top-50 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                <span class="visually-hidden">New alerts</span>
+              </span>
+            </span>
+            <span class="p-3">Recording</span>
+          </div>
+        </div>
+      }
+
+      @if(recordings().length > 0) {
+        @for(file of recordings(); track $index) {
+          <div class="row">
+            <div class="col">
+              <app-audio-player [upload]="file" [autoPlay]="false"></app-audio-player>
+              <button class="btn btn-dark btn-outline-dark btn-text-white" (click)="deleteRecording(file)">Delete</button>
+              <button class="btn btn-primary btn-outline-dark" (click)="downloadRecording(file)">Download</button>
+            </div>
+          </div>
+        }
       }
     </div>
 
