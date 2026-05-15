@@ -7,6 +7,7 @@
       <button class="btn btn-outline-dark" [ngClass]="{
       'btn-primary': !running(),
       'btn-dark': running(),
+      'btn-text-white': running()
       }" (click)="((running()) ? stop() : start())">{{(running()) ? 'Stop' : 'Start'}}</button>
 
     </div>

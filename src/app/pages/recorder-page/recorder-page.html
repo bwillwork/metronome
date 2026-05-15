@@ -6,6 +6,7 @@
     <button class="btn btn-outline-dark" [ngClass]="{
       'btn-primary': !recording(),
       'btn-dark': recording(),
+      'btn-text-white': recording()
       }" (click)="((recording()) ? stop() : record())">{{(recording()) ? 'Stop' : 'Record'}}</button>
   </div>
   <div>
@@ -14,7 +15,7 @@
         <div>
           <!--audio controls [src]="file.audioURL"></audio-->
           <app-audio-player [upload]="file" [autoPlay]="false"></app-audio-player>
-          <button class="btn btn-danger btn-outline-dark btn-text-white" (click)="deleteRecording(file)">Delete</button>
+          <button class="btn btn-dark btn-outline-dark btn-text-white" (click)="deleteRecording(file)">Delete</button>
           <button class="btn btn-primary btn-outline-dark" (click)="downloadRecording(file)">Download</button>
         </div>
       }
