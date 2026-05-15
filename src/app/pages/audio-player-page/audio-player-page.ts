@@ -4,10 +4,11 @@ import { AudioUpload } from '../../types/audio-files';
 import { log } from '../../util/logger';
 import { Subscription } from 'rxjs';
 import { AudioPlayer } from '../../components/audio-player/audio-player';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-audio-player-page',
-  imports: [AudioPlayer],
+  imports: [AudioPlayer, NgClass],
   templateUrl: './audio-player-page.html',
   styleUrl: './audio-player-page.css',
 })

@@ -1,26 +1,29 @@
-<div class="d-flex flex-column justify-content-center align-items-center h-600">
+<div class="d-flex flex-column justify-content-center align-items-center">
   <div>
     <!-- Player -->
     <app-audio-player [upload]="currentlyPlaying()"></app-audio-player>
   </div>
-  <div>
+  <div class="w-50">
     <!-- Playlist list -->
     <h2>Playlist</h2>
-    <ul>
+
+    <div class="container">
       @for(upload of playlist(); track $index) {
-        <li>
-          @if(upload.isChosen) {
-            <span>Is Chosen</span>
-          } @else {
-            <button class="btn btn-primary btn-outline-dark" (click)="choose(upload)">Play</button>
-          }
-          <span> | </span>
-          <span>{{upload.filename}}</span>
-          <span> | </span>
-          <button class="btn btn-dark btn-outline-dark btn-text-white" (click)="removeFromPlaylist(upload)">Delete</button>
-        </li>
+        <div class="row" [ngClass]="{
+          'bg-secondary': upload.isChosen
+        }">
+          <div class="col"> {{upload.filename}}</div>
+          <div class="col-2">
+            @if(!upload.isChosen) {
+              <button class="btn btn-primary btn-outline-dark float-end" (click)="choose(upload)">Play</button>
+            }
+          </div>
+          <div class="col-2">
+            <button class="btn btn-dark btn-outline-dark btn-text-white float-end" (click)="removeFromPlaylist(upload)">Delete</button>
+          </div>
+        </div>
       }
-    </ul>
+    </div>
   </div>
   <div>
     <input type="file" (change)="uploadFiles($event)" accept="audio/*" multiple/>
