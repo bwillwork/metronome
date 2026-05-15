@@ -11,14 +11,11 @@
 
     </div>
     <div>
-      <label>Beats Per Min: </label>
-      <button class="btn " (click)="minus()">Minus</button>
-      <input class="form-range" type="range" [value]="config().beatsPerMinute" (change)="rangeChange($event)" [min]="minBPMinute" [max]="maxBPMinute"/>
-      <button class="btn" (click)="plus()">Plus</button>
+      <app-custom-slider [value]="config().beatsPerMinute" [min]="minBPMinute" [max]="maxBPMinute" (valueChange)="newRangeChange($event)"></app-custom-slider>
     </div>
     <div>
-      <label>Beats Per Measure: </label>
-      <input type="number" [value]="config().signature.beatsPerMeasure" (change)="updateBeatsPerMeasure($event)" [min]="minBPMeasure" [max]="maxBPMeasure"/>
+      <label>Beats Per Measure</label>
+      <input class="form-control" type="number" [value]="config().signature.beatsPerMeasure" (change)="updateBeatsPerMeasure($event)" [min]="minBPMeasure" [max]="maxBPMeasure"/>
     </div>
   </div>
 </div>

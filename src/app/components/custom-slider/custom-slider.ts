@@ -1,4 +1,5 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
+import { log } from '../../util/logger';
 
 @Component({
   selector: 'app-custom-slider',
@@ -12,24 +13,26 @@ export class CustomSlider {
   min = input<number>(1);
   max = input<number>(100);
 
-  change = output<number>();
+  valueChange = output<number>();
 
-  minus(event:any) {
-    const value = parseInt(event.target.value);
-    if (value >= this.min()) {
-      this.change.emit(value);
+  minus() {
+    log(this.value());
+    if (this.value() > this.min()) {
+      const newValue = this.value() - 1;
+      this.valueChange.emit(newValue);
     }
   }
-  plus(event:any) {
-    const value = parseInt(event.target.value);
-    if (value <= this.max()) {
-      this.change.emit(value);
+  plus() {
+    log(this.value());
+    if (this.value() < this.max()) {
+      const newValue = this.value() + 1;
+      this.valueChange.emit(newValue);
     }
   }
 
   onChange(event:any) {
     const value = parseInt(event.target.value);
-    this.change.emit(value);
+    this.valueChange.emit(value);
   }
 
 }

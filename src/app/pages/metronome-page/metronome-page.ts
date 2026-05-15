@@ -6,10 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { MetronomeConfig } from '../../types/metronome';
 import { SoundService } from '../../services/sound/sound-service';
 import { Subscription } from 'rxjs';
+import { CustomSlider } from '../../components/custom-slider/custom-slider';
+import { log } from '../../util/logger';
 
 @Component({
   selector: 'app-metronome-page',
-  imports: [MetronomeDisplay, NgClass, FormsModule],
+  imports: [MetronomeDisplay, NgClass, FormsModule, CustomSlider],
   templateUrl: './metronome-page.html',
   styleUrl: './metronome-page.css',
 })
@@ -29,9 +31,11 @@ export class MetronomePage implements OnInit, OnDestroy {
   public maxBPMeasure = 16;
 
   ngOnInit(): void {
-    this.subs.push(this.metronomeService.subscribe(() => {
-      this.soundService.playClick();
-    }));
+    this.subs.push(
+      this.metronomeService.subscribe(() => {
+        this.soundService.playClick();
+      }),
+    );
   }
 
   start() {
@@ -58,7 +62,15 @@ export class MetronomePage implements OnInit, OnDestroy {
     }
   }
 
+  newRangeChange(value: number) {
+    log('change yo: ',value);
+    const current = this.config();
+    current.beatsPerMinute = value;
+    this.metronomeService.configure(current);
+  }
+
   rangeChange(event: any) {
+
     const value = parseInt(event.target.value);
     const current = this.config();
     if (value <= this.maxBPMinute && value >= this.minBPMinute) {
