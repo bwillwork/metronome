@@ -1,7 +1,7 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { AudioFileService } from '../../services/audio-file/audio-file-service';
 import { AudioUpload } from '../../types/audio-files';
-import { log } from '../../util/logger';
+import { log } from '../../util/loggerUtil';
 import { Subscription } from 'rxjs';
 import { AudioPlayer } from '../../components/audio-player/audio-player';
 import { NgClass } from '@angular/common';

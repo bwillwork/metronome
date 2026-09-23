@@ -1,5 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
-import { log } from '../../util/logger';
+import { log } from '../../util/loggerUtil';
 
 @Component({
   selector: 'app-custom-slider',

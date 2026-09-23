@@ -7,7 +7,7 @@ import { MetronomeConfig } from '../../types/metronome';
 import { SoundService } from '../../services/sound/sound-service';
 import { Subscription } from 'rxjs';
 import { CustomSlider } from '../../components/custom-slider/custom-slider';
-import { log } from '../../util/logger';
+import { log } from '../../util/loggerUtil';
 
 @Component({
   selector: 'app-metronome-page',
@@ -44,22 +44,6 @@ export class MetronomePage implements OnInit, OnDestroy {
 
   stop() {
     this.metronomeService.stop();
-  }
-
-  minus() {
-    const current = this.config();
-    if (current.beatsPerMinute > this.minBPMinute) {
-      current.beatsPerMinute -= 1;
-      this.metronomeService.configure(current);
-    }
-  }
-
-  plus() {
-    const current = this.config();
-    if (current.beatsPerMinute < this.maxBPMinute) {
-      current.beatsPerMinute += 1;
-      this.metronomeService.configure(current);
-    }
   }
 
   newRangeChange(value: number) {

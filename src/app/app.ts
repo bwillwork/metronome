@@ -9,5 +9,5 @@ import { NgClass } from '@angular/common';
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('metronome');
+
 }

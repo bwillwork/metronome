@@ -8,8 +8,8 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { AudioUpload, Recording } from '../../types/audio-files';
-import { log } from '../../util/logger';
-import { falseFunc, trueFunc } from '../../util/signals';
+import { log } from '../../util/loggerUtil';
+import { falseFunc, trueFunc } from '../../util/signalsUtil';
 
 @Component({
   selector: 'app-audio-player',

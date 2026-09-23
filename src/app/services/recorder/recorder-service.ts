@@ -1,9 +1,9 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { NAVIGATOR } from '../../util/tokens';
+import { NAVIGATOR } from '../../util/tokensUtil';
 import { Observable, Subscription } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { falseFunc, trueFunc } from '../../util/signals';
-import { error, log } from '../../util/logger';
+import { falseFunc, trueFunc } from '../../util/signalsUtil';
+import { error, log } from '../../util/loggerUtil';
 
 @Injectable({
   providedIn: 'root',
