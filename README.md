@@ -1,7 +1,7 @@
 # Metronome, Audio Recorder, And Audio Player
 
 ## Live Demo
-To see the live version of this project, please visit: https://metronome.bwillwork.workers.dev/metronome
+To see the live version of this project, please visit: https://metronome.bwillwork.workers.dev
 
 ## Local Installation
 If you wish to run the project locally run the following script:
