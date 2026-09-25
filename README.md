@@ -16,7 +16,7 @@ npm install && npm run start
 
 ## Description
 
-This is another small project that originally was an experiment.  I wanted to explore audio browser APIs and I felt that some of the tools I worked with deserved their own small app for others to use.
+This is another small project that originally was an experiment.  I wanted to explore audio browser APIs and I felt that some of the tools I developed deserved their own small app for others to use.
 
 ### Features
 - **Metronome**: The first page has a simple metronome for practicing a musical instrument
