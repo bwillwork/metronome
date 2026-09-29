@@ -12,17 +12,18 @@
       <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
         <li class="nav-item w-25" role="presentation">
           <a
-            routerLink="/metronome"
+            routerLink="/"
             routerLinkActive="active"
             #rla="routerLinkActive"
             class="nav-link w-100 text-center"
             [ngClass]="{
               'bg-dark': rla.isActive
             }"
+            [routerLinkActiveOptions]="{exact:true}"
             id="metronome-tab"
             type="button"
             role="tab"
-            aria-controls="home-tab-pane">
+            aria-controls="metronome-tab-pane">
             Metronome
           </a>
         </li>
@@ -35,10 +36,11 @@
             [ngClass]="{
               'bg-dark': rla2.isActive
             }"
+            [routerLinkActiveOptions]="{exact:true}"
             id="tuner-tab"
             type="button"
             role="tab"
-            aria-controls="profile-tab-pane">
+            aria-controls="recorder-tab-pane">
             Recorder
           </a>
         </li>
@@ -51,10 +53,11 @@
             [ngClass]="{
               'bg-dark': rla3.isActive
             }"
+            [routerLinkActiveOptions]="{exact:true}"
             id="audio-player-tab"
             type="button"
             role="tab"
-            aria-controls="profile-tab-pane">
+            aria-controls="audio-tab-pane">
             Audio Player
           </a>
         </li>

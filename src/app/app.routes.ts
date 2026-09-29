@@ -9,8 +9,8 @@ const unsavedChangesGuard: CanDeactivateFn<RecorderPage> = (component: RecorderP
 };
 
 export const routes: Routes = [
-  { path: 'metronome', component: MetronomePage },
+  { path: '', component: MetronomePage },
   { path: 'recorder', component: RecorderPage, canDeactivate: [unsavedChangesGuard] },
   { path: 'audio', component: AudioPlayerPage },
-  { path: '**', redirectTo: '/metronome' },
+  { path: '**', redirectTo: '/' },
 ];
